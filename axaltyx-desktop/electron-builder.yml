@@ -8,21 +8,17 @@ directories:
 files:
   - dist/**/*
   - package.json
-  - resources/python/**/*
 win:
   target: nsis
-  icon: resources/icons/icon.ico
 mac:
   target:
     - dmg
     - pkg
-  icon: resources/icons/icon.icns
 linux:
   target:
     - deb
     - rpm
     - AppImage
-  icon: resources/icons
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
