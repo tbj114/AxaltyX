@@ -1,6 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
-title AxaltyX 全自动编译工具 v2.3
+title AxaltyX 全自动编译工具 v2.5
 chcp 65001 >nul
 color 0B
 
@@ -8,7 +8,7 @@ color 0B
 cls
 echo.
 echo ================================================================
-echo                      AxaltyX 编译工具 v2.3
+echo                      AxaltyX 编译工具 v2.5
 echo ================================================================
 echo.
 echo [信息] 准备开始全自动编译流程...
@@ -41,8 +41,25 @@ echo.
 
 :check_nodejs
 echo [3/10] 检查 Node.js...
+set "NODE_FOUND=0"
+
+rem 尝试执行 node 命令
 node --version >nul 2>&1
-if errorlevel 1 (
+if %errorLevel% equ 0 (
+    set "NODE_FOUND=1"
+) else (
+    rem 尝试直接执行 node 命令到文件
+    node --version >node_version.txt 2>&1
+    if exist node_version.txt (
+        set /p NODE_VER=<node_version.txt
+        if not "%NODE_VER%" equ "" (
+            set "NODE_FOUND=1"
+        )
+        del node_version.txt
+    )
+)
+
+if "%NODE_FOUND%" equ "0" (
     echo [警告] 未检测到 Node.js
     echo.
     echo ================================================================
@@ -59,26 +76,62 @@ if errorlevel 1 (
     echo.
     pause
     exit /b 1
+) else (
+    for /f "tokens=*" %%i in ('node --version') do set NODE_VER=%%i
+    echo [成功] Node.js 版本: %NODE_VER%
 )
-for /f "tokens=*" %%i in ('node --version') do set NODE_VER=%%i
-echo [成功] Node.js 版本: %NODE_VER%
 
 echo.
 echo [检查] npm...
+set "NPM_FOUND=0"
+
+rem 尝试执行 npm 命令
 npm --version >nul 2>&1
-if errorlevel 1 (
+if %errorLevel% equ 0 (
+    set "NPM_FOUND=1"
+) else (
+    rem 尝试直接执行 npm 命令到文件
+    npm --version >npm_version.txt 2>&1
+    if exist npm_version.txt (
+        set /p NPM_VER=<npm_version.txt
+        if not "%NPM_VER%" equ "" (
+            set "NPM_FOUND=1"
+        )
+        del npm_version.txt
+    )
+)
+
+if "%NPM_FOUND%" equ "0" (
     echo [错误] npm 不可用
     pause
     exit /b 1
+) else (
+    for /f "tokens=*" %%i in ('npm --version') do set NPM_VER=%%i
+    echo [成功] npm 版本: %NPM_VER%
 )
-for /f "tokens=*" %%i in ('npm --version') do set NPM_VER=%%i
-echo [成功] npm 版本: %NPM_VER%
 echo.
 
 :check_python
 echo [4/10] 检查 Python...
+set "PYTHON_FOUND=0"
+
+rem 尝试执行 python 命令
 python --version >nul 2>&1
-if errorlevel 1 (
+if %errorLevel% equ 0 (
+    set "PYTHON_FOUND=1"
+) else (
+    rem 尝试直接执行 python 命令到文件
+    python --version >python_version.txt 2>&1
+    if exist python_version.txt (
+        set /p PYTHON_VER=<python_version.txt
+        if not "%PYTHON_VER%" equ "" (
+            set "PYTHON_FOUND=1"
+        )
+        del python_version.txt
+    )
+)
+
+if "%PYTHON_FOUND%" equ "0" (
     echo [警告] 未检测到 Python
     echo.
     echo ================================================================
@@ -109,8 +162,25 @@ echo.
 
 :check_git
 echo [5/10] 检查 Git（可选）...
+set "GIT_FOUND=0"
+
+rem 尝试执行 git 命令
 git --version >nul 2>&1
-if errorlevel 1 (
+if %errorLevel% equ 0 (
+    set "GIT_FOUND=1"
+) else (
+    rem 尝试直接执行 git 命令到文件
+    git --version >git_version.txt 2>&1
+    if exist git_version.txt (
+        set /p GIT_VER=<git_version.txt
+        if not "%GIT_VER%" equ "" (
+            set "GIT_FOUND=1"
+        )
+        del git_version.txt
+    )
+)
+
+if "%GIT_FOUND%" equ "0" (
     echo [提示] 未检测到 Git，将使用本地文件
     set GIT_AVAILABLE=0
 ) else (
