@@ -7,10 +7,10 @@
   "main": "dist/electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build &amp;&amp; npm run build:electron &amp;&amp; electron-builder",
+    "build": "vite build && npm run build:electron && electron-builder",
     "preview": "vite preview",
-    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 &amp;&amp; npm run build:electron &amp;&amp; electron .\"",
-    "electron:build": "vite build &amp;&amp; npm run build:electron &amp;&amp; electron-builder",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npm run build:electron && electron .\"",
+    "electron:build": "vite build && npm run build:electron && electron-builder",
     "build:electron": "tsc -p tsconfig.electron.json"
   },
   "dependencies": {
