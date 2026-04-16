@@ -1,6 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
-title AxaltyX 全自动编译工具 v2.5
+title AxaltyX 全自动编译工具 v2.6
 chcp 65001 >nul
 color 0B
 
@@ -8,7 +8,7 @@ color 0B
 cls
 echo.
 echo ================================================================
-echo                      AxaltyX 编译工具 v2.5
+echo                      AxaltyX 编译工具 v2.6
 echo ================================================================
 echo.
 echo [信息] 准备开始全自动编译流程...
@@ -36,28 +36,80 @@ echo.
 echo [2/10] 检查系统环境...
 echo [信息] 操作系统: %OS%
 echo [信息] 处理器架构: %PROCESSOR_ARCHITECTURE%
+echo [信息] 当前目录: %CD%
+echo [信息] PATH 环境变量: %PATH%
 echo [成功] 系统检查完成
 echo.
 
 :check_nodejs
 echo [3/10] 检查 Node.js...
 set "NODE_FOUND=0"
+set "NODE_VER="
 
-rem 尝试执行 node 命令
-node --version >nul 2>&1
+rem 方法1: 直接执行 node --version
+echo [调试] 方法1: 直接执行 node --version
+node --version >node_version1.txt 2>&1
 if %errorLevel% equ 0 (
     set "NODE_FOUND=1"
+    set /p NODE_VER=<node_version1.txt
+    echo [调试] 方法1成功: %NODE_VER%
 ) else (
-    rem 尝试直接执行 node 命令到文件
-    node --version >node_version.txt 2>&1
-    if exist node_version.txt (
-        set /p NODE_VER=<node_version.txt
-        if not "%NODE_VER%" equ "" (
-            set "NODE_FOUND=1"
+    echo [调试] 方法1失败，错误码: %errorLevel%
+    type node_version1.txt 2>nul
+)
+
+rem 方法2: 使用 where 命令查找 node.exe
+if "%NODE_FOUND%" equ "0" (
+    echo [调试] 方法2: 使用 where 命令查找 node.exe
+    where node.exe >node_where.txt 2>&1
+    if %errorLevel% equ 0 (
+        echo [调试] 找到 node.exe:
+        type node_where.txt
+        rem 尝试使用找到的路径执行 node
+        for /f "tokens=*" %%i in (node_where.txt) do (
+            "%%i" --version >node_version2.txt 2>&1
+            if %errorLevel% equ 0 (
+                set "NODE_FOUND=1"
+                set /p NODE_VER=<node_version2.txt
+                echo [调试] 方法2成功: %NODE_VER%
+                goto :node_found
+            )
         )
-        del node_version.txt
+    ) else (
+        echo [调试] 方法2失败，错误码: %errorLevel%
     )
 )
+
+:node_found
+
+rem 方法3: 检查常见安装路径
+if "%NODE_FOUND%" equ "0" (
+    echo [调试] 方法3: 检查常见安装路径
+    set "node_paths=
+C:\Program Files\nodejs\node.exe
+C:\Program Files (x86)\nodejs\node.exe
+%APPDATA%\npm\node.exe
+%USERPROFILE%\AppData\Roaming\npm\node.exe"
+    
+    for %%p in (%node_paths%) do (
+        if exist "%%p" (
+            echo [调试] 找到 node.exe 在: %%p
+            "%%p" --version >node_version3.txt 2>&1
+            if %errorLevel% equ 0 (
+                set "NODE_FOUND=1"
+                set /p NODE_VER=<node_version3.txt
+                echo [调试] 方法3成功: %NODE_VER%
+                goto :node_found
+            )
+        )
+    )
+)
+
+rem 清理临时文件
+del node_version1.txt 2>nul
+del node_version2.txt 2>nul
+del node_version3.txt 2>nul
+del node_where.txt 2>nul
 
 if "%NODE_FOUND%" equ "0" (
     echo [警告] 未检测到 Node.js
@@ -77,59 +129,66 @@ if "%NODE_FOUND%" equ "0" (
     pause
     exit /b 1
 ) else (
-    for /f "tokens=*" %%i in ('node --version') do set NODE_VER=%%i
     echo [成功] Node.js 版本: %NODE_VER%
 )
 
 echo.
 echo [检查] npm...
 set "NPM_FOUND=0"
+set "NPM_VER="
 
 rem 尝试执行 npm 命令
-npm --version >nul 2>&1
+npm --version >npm_version.txt 2>&1
 if %errorLevel% equ 0 (
     set "NPM_FOUND=1"
+    set /p NPM_VER=<npm_version.txt
+    echo [成功] npm 版本: %NPM_VER%
 ) else (
-    rem 尝试直接执行 npm 命令到文件
-    npm --version >npm_version.txt 2>&1
-    if exist npm_version.txt (
-        set /p NPM_VER=<npm_version.txt
-        if not "%NPM_VER%" equ "" (
-            set "NPM_FOUND=1"
+    echo [警告] 未检测到 npm，尝试使用 node 路径查找
+    rem 尝试从 node 路径找到 npm
+    for %%i in (node.exe) do (
+        set "node_dir=%%~dpi"
+        set "npm_path=!node_dir!npm.cmd"
+        if exist "!npm_path!" (
+            "!npm_path!" --version >npm_version2.txt 2>&1
+            if %errorLevel% equ 0 (
+                set "NPM_FOUND=1"
+                set /p NPM_VER=<npm_version2.txt
+                echo [成功] npm 版本: %NPM_VER%
+            )
         )
-        del npm_version.txt
+    )
+    if "%NPM_FOUND%" equ "0" (
+        echo [错误] npm 不可用
+        pause
+        exit /b 1
     )
 )
-
-if "%NPM_FOUND%" equ "0" (
-    echo [错误] npm 不可用
-    pause
-    exit /b 1
-) else (
-    for /f "tokens=*" %%i in ('npm --version') do set NPM_VER=%%i
-    echo [成功] npm 版本: %NPM_VER%
-)
+del npm_version.txt 2>nul
+del npm_version2.txt 2>nul
 echo.
 
 :check_python
 echo [4/10] 检查 Python...
 set "PYTHON_FOUND=0"
+set "PYTHON_VER="
 
 rem 尝试执行 python 命令
-python --version >nul 2>&1
+python --version >python_version.txt 2>&1
 if %errorLevel% equ 0 (
     set "PYTHON_FOUND=1"
+    set /p PYTHON_VER=<python_version.txt
 ) else (
-    rem 尝试直接执行 python 命令到文件
-    python --version >python_version.txt 2>&1
-    if exist python_version.txt (
-        set /p PYTHON_VER=<python_version.txt
-        if not "%PYTHON_VER%" equ "" (
-            set "PYTHON_FOUND=1"
-        )
-        del python_version.txt
+    rem 尝试 python3 命令
+    python3 --version >python_version2.txt 2>&1
+    if %errorLevel% equ 0 (
+        set "PYTHON_FOUND=1"
+        set /p PYTHON_VER=<python_version2.txt
     )
 )
+
+del python_version.txt 2>nul
+del python_version2.txt 2>nul
 
 if "%PYTHON_FOUND%" equ "0" (
     echo [警告] 未检测到 Python
@@ -154,7 +213,6 @@ if "%PYTHON_FOUND%" equ "0" (
     )
     set PYTHON_AVAILABLE=0
 ) else (
-    for /f "tokens=*" %%i in ('python --version') do set PYTHON_VER=%%i
     echo [成功] Python 版本: %PYTHON_VER%
     set PYTHON_AVAILABLE=1
 )
@@ -163,28 +221,20 @@ echo.
 :check_git
 echo [5/10] 检查 Git（可选）...
 set "GIT_FOUND=0"
+set "GIT_VER="
 
 rem 尝试执行 git 命令
-git --version >nul 2>&1
+git --version >git_version.txt 2>&1
 if %errorLevel% equ 0 (
     set "GIT_FOUND=1"
-) else (
-    rem 尝试直接执行 git 命令到文件
-    git --version >git_version.txt 2>&1
-    if exist git_version.txt (
-        set /p GIT_VER=<git_version.txt
-        if not "%GIT_VER%" equ "" (
-            set "GIT_FOUND=1"
-        )
-        del git_version.txt
-    )
+    set /p GIT_VER=<git_version.txt
 )
+del git_version.txt 2>nul
 
 if "%GIT_FOUND%" equ "0" (
     echo [提示] 未检测到 Git，将使用本地文件
     set GIT_AVAILABLE=0
 ) else (
-    for /f "tokens=*" %%i in ('git --version') do set GIT_VER=%%i
     echo [成功] Git 版本: %GIT_VER%
     set GIT_AVAILABLE=1
 )
