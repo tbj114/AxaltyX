@@ -1,0 +1,81 @@
+
+.variable-panel {
+  width: 260px;
+  background: #FFFFFF;
+  border-right: 1px solid #E5E6EB;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.variable-card {
+  border: none;
+  border-radius: 0;
+  height: 100%;
+}
+
+.variable-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1D2129;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.variable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.variable-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.variable-item:hover {
+  background: #F7F8FA;
+}
+
+.variable-item:active {
+  cursor: grabbing;
+}
+
+.variable-icon {
+  width: 32px;
+  height: 32px;
+  background: #F7F8FA;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4E5969;
+  flex-shrink: 0;
+}
+
+.variable-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.variable-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1D2129;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.variable-meta {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
