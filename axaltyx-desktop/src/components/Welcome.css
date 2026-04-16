@@ -1,0 +1,131 @@
+
+.welcome-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-hero {
+  background: linear-gradient(135deg, #165DFF 0%, #0E42D2 100%);
+  padding: 60px 48px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero-title {
+  color: #FFFFFF !important;
+  margin-bottom: 12px !important;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 16px;
+  margin-bottom: 32px !important;
+}
+
+.hero-actions {
+  display: flex;
+}
+
+.welcome-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-title {
+  color: #1D2129 !important;
+  margin-bottom: 0 !important;
+}
+
+.quick-start-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.quick-start-card {
+  text-align: center;
+  padding: 24px 16px;
+  border: 1px solid #E5E6EB;
+  transition: all 0.2s ease;
+}
+
+.quick-start-card:hover {
+  border-color: #165DFF;
+  box-shadow: 0 4px 12px rgba(22, 93, 255, 0.15);
+}
+
+.quick-start-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #E8F3FF 0%, #C9DDFF 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #165DFF;
+}
+
+.quick-start-title {
+  color: #1D2129 !important;
+  margin-bottom: 8px !important;
+}
+
+.quick-start-desc {
+  font-size: 13px;
+}
+
+.recent-projects-card {
+  border: 1px solid #E5E6EB;
+}
+
+.recent-projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recent-project-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #F7F8FA;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.recent-project-item:hover {
+  background: #F2F3F5;
+}
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-name {
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.project-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}

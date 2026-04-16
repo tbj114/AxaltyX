@@ -1,0 +1,57 @@
+
+.data-visualizer {
+  height: 100%;
+  overflow: auto;
+}
+
+.visualizer-setup {
+  padding: 20px;
+}
+
+.setup-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.setup-actions {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e6eb;
+}
+
+.chart-container {
+  min-height: 600px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  min-height: 500px;
+}
+
+.loading-container p {
+  margin-top: 16px;
+  color: #86909c;
+  font-size: 14px;
+}
+
+.empty-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  color: #86909c;
+}
+
+.data-visualizer .arco-tabs-header {
+  margin-bottom: 20px;
+}
+
+.data-visualizer .arco-form-item-label {
+  font-weight: 500;
+}

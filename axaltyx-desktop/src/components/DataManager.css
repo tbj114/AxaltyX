@@ -1,0 +1,83 @@
+
+.data-manager {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+}
+
+.data-manager-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e6eb;
+  background: #f7f8fa;
+}
+
+.data-manager-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.data-manager-info {
+  padding: 12px 20px;
+  background: #f2f3f5;
+  border-bottom: 1px solid #e5e6eb;
+}
+
+.data-manager-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f7f8fa 0%, #e8f3ff 100%);
+}
+
+.empty-content {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.empty-content h3 {
+  font-size: 24px;
+  color: #1d2129;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.empty-content p {
+  font-size: 14px;
+  color: #86909c;
+  margin-bottom: 32px;
+}
+
+.data-manager .arco-table {
+  flex: 1;
+}
+
+.data-manager .arco-table-body {
+  font-size: 13px;
+}
+
+.data-manager .arco-table-th {
+  background: #f7f8fa;
+  font-weight: 600;
+  color: #1d2129;
+}
+
+.data-manager .arco-table-td {
+  padding: 8px 12px;
+}
+
+.data-manager .arco-table-tr:hover .arco-table-td {
+  background: #e8f3ff;
+}
